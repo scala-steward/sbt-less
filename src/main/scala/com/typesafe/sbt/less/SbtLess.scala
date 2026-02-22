@@ -85,7 +85,7 @@ object SbtLess extends AutoPlugin {
       "strictMath" -> JsBoolean(strictMath.value),
       "strictUnits" -> JsBoolean(strictUnits.value),
       "verbose" -> JsBoolean(verbose.value)
-    ).toString()
+    ).compactPrint
   )
 
   private def toJsObjectOrNull(fields: Seq[(String, String)]): JsValue = {

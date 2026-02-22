@@ -1,7 +1,7 @@
 # Compile an empty less file
 
 > assets
-$ exists target/web/public/main/css/empty.css
+$ exists target/**/web/public/main/css/empty.css
 
 # Check variable presence
 > checkFileContents

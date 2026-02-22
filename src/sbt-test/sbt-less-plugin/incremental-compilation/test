@@ -2,8 +2,8 @@
 # the old file contents when it reads them.
 
 > assets
-$ exists target/web/public/main/css/main.css
-> contains target/web/public/main/css/main.css original
+$ exists target/**/web/public/main/css/main.css
+> contains target/**/web/public/main/css/main.css original
 
 $ copy-file included.less.1 src/main/assets/css/included.less
 $ sleep 1000
@@ -11,4 +11,4 @@ $ sleep 1000
 $ sleep 1000
 
 # Check that main.css was recompiled with the new included file
-> contains target/web/public/main/css/main.css modified
+> contains target/**/web/public/main/css/main.css modified
