@@ -1,9 +1,19 @@
 lazy val root = (project in file(".")).enablePlugins(SbtWeb)
 
 InputKey[Unit]("contains") := {
-  val Seq(checkFile, expect) = Def.spaceDelimited("<file> <expect>").parsed
-  val contents = IO.read(file(checkFile))
-  if (!contents.contains(expect)) {
-    sys.error(s"$checkFile does not contain $expect, instead was: $contents")
+  val Seq(pattern, expect) = Def.spaceDelimited("<file-pattern> <expect>").parsed
+
+  val matches: Seq[File] = sbt.nio.file.FileTreeView.default
+    .list(Glob(baseDirectory.value.toPath, pattern))
+    .map { case (path, _) => path.toFile }
+
+  matches.headOption match {
+    case Some(f) =>
+      val contents = IO.read(f)
+      if (!contents.contains(expect)) {
+        sys.error(s"${f.getPath} does not contain $expect, instead was: $contents")
+      }
+    case None =>
+      sys.error(s"No files matched pattern: $pattern")
   }
 }

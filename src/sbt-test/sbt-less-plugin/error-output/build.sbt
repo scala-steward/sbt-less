@@ -1,6 +1,8 @@
 import LessKeys._
 import JsEngineKeys._
+import sbt.internal.inc.LoggedReporter
 import scala.collection.concurrent.TrieMap
+import xsbti.Problem
 
 lazy val root = (project in file("."))
   .enablePlugins(SbtWeb)
@@ -10,7 +12,13 @@ val errors = SettingKey[TrieMap[String, (Int, Int, String, String)]]("errors")
 
 errors := TrieMap.empty
 
-WebKeys.reporter := new Compat.CapturingLoggerReporter(streams.value.log, errors.value)
+WebKeys.reporter := new LoggedReporter(-1, streams.value.log) {
+    override def log(problem: Problem): Unit = {
+      errors.value += (problem.position().sourceFile().get().getName ->
+        (problem.position().line().get(), problem.position().offset().get() + 1, problem.message(), problem.position().lineContent())
+      )
+    }
+  }
 
 (Assets / less / includeFilter) := GlobFilter("*.less")
 
