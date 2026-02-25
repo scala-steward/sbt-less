@@ -85,15 +85,15 @@ object SbtLess extends AutoPlugin {
       "strictMath" -> JsBoolean(strictMath.value),
       "strictUnits" -> JsBoolean(strictUnits.value),
       "verbose" -> JsBoolean(verbose.value)
-    ).toString()
+    ).compactPrint
   )
 
   private def toJsObjectOrNull(fields: Seq[(String, String)]): JsValue = {
     if (fields.isEmpty) JsNull
-    else JsObject(fields.toMap.mapValues(v => JsString(v)))
+    else JsObject(fields.map { case (k, v) => k -> JsString(v) }.toMap)
   }
 
-  override def buildSettings = inTask(less)(
+  override def buildSettings = Project.inTask(less)(
     SbtJsTask.jsTaskSpecificUnscopedBuildSettings ++ Seq(
       moduleName := "less",
       shellFile := getClass.getClassLoader.getResource("lessc.js")
@@ -124,7 +124,7 @@ object SbtLess extends AutoPlugin {
     strictUnits := false,
     verbose := false
 
-  ) ++ inTask(less)(
+  ) ++ Project.inTask(less)(
     SbtJsTask.jsTaskSpecificUnscopedProjectSettings ++
       inConfig(Assets)(lessUnscopedSettings) ++
       inConfig(TestAssets)(lessUnscopedSettings) ++
