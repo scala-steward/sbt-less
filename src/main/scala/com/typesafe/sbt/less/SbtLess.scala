@@ -9,6 +9,7 @@ import spray.json._
 object Import {
 
   object LessKeys {
+    @transient
     val less = TaskKey[Seq[File]]("less", "Invoke the less compiler.")
 
     val cleancss = SettingKey[Boolean]("less-cleancss", "Compress output using clean-css.")
