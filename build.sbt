@@ -11,13 +11,13 @@ developers += Developer(
   url("https://github.com/playframework")
 )
 
-addSbtJsEngine("1.4.0-M2")
-addSbtWeb("1.6.0-M2")
+addSbtJsEngine("1.4.0-M4")
+addSbtWeb("1.6.0-M4")
 
 pluginCrossBuild / sbtVersion := {
   scalaBinaryVersion.value match {
     case "3" =>
-      "2.0.0-RC9"
+      "2.0.0-RC11"
     case _ =>
       sbtVersion.value
   }
@@ -32,7 +32,7 @@ scalacOptions ++= {
     case "3" =>
       Nil
     case _ =>
-      Seq("-release:8")
+      Seq("-Xsource:3", "-release:8")
   }
 }
 
